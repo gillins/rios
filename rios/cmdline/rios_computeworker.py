@@ -19,6 +19,7 @@ Main script for a compute worker running in a separate process.
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import argparse
+import traceback
 
 from osgeo import gdal
 
@@ -122,6 +123,7 @@ def riosRemoteComputeWorker(workerID, host, port, authkey):
             dataChan.outqueue.put(otherArgs)
     except Exception as e:
         print('got exception', str(e))
+        traceback.print_exc()
         # Send a printable version of the exception back to main thread
         workerErr = WorkerErrorRecord(e, 'compute', workerID)
         dataChan.exceptionQue.put(workerErr)
