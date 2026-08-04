@@ -121,6 +121,7 @@ def riosRemoteComputeWorker(workerID, host, port, authkey):
         if otherArgs is not None:
             dataChan.outqueue.put(otherArgs)
     except Exception as e:
+        print('got exception', str(e))
         # Send a printable version of the exception back to main thread
         workerErr = WorkerErrorRecord(e, 'compute', workerID)
         dataChan.exceptionQue.put(workerErr)
