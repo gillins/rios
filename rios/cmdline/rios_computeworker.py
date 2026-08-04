@@ -77,8 +77,10 @@ def riosRemoteComputeWorker(workerID, host, port, authkey):
     The main routine to run a compute worker on a remote host.
 
     """
+    print('Job Running')
     dataChan = NetworkDataChannel(hostname=host, portnum=port, authkey=authkey)
 
+    print('reading job description')
     userFunction = dataChan.workerInitData.get('userFunction', None)
     infiles = dataChan.workerInitData.get('infiles', None)
     outfiles = dataChan.workerInitData.get('outfiles', None)
@@ -97,6 +99,8 @@ def riosRemoteComputeWorker(workerID, host, port, authkey):
     blockListByWorker = dataChan.workerInitData.get('blockListByWorker', None)
     blockList = blockListByWorker[workerID]
 
+    print('read job description')
+
     if (not controls.concurrency.singleBlockComputeWorkers and
             hasattr(workerBarrier, 'wait')):
         # Wait at the barrier, so nothing proceeds until all workers have had
@@ -104,10 +108,14 @@ def riosRemoteComputeWorker(workerID, host, port, authkey):
         computeBarrierTimeout = controls.concurrency.computeBarrierTimeout
         workerBarrier.wait(timeout=computeBarrierTimeout)
 
+    print('finished at barier')
+
     try:
         rtn = applier.apply_singleCompute(userFunction, infiles, outfiles,
             otherArgs, controls, allInfo, workinggrid, blockList,
             outBlockBuffer, inBlockBuffer, workerID, forceExit)
+
+        print('processed blocks')
 
         dataChan.outqueue.put(rtn.timings)
         if otherArgs is not None:
