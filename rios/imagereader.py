@@ -328,7 +328,9 @@ def openForWorkingGrid(filename, workinggrid, fileInfo, controls,
         gdal.Warp(vrtfile, filename, options=warpOptions)
         fileToOpen = vrtfile
 
+    print('about to open', fileToOpen)
     ds = gdal.Open(fileToOpen)
+    print('opened', fileToOpen)
     layerselection = controls.getOptionForImagename('layerselection',
             symbolicName)
     if layerselection is None:
