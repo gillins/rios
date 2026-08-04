@@ -55,10 +55,12 @@ def readBlockAllFiles(infiles, workinggrid, blockDefn, allInfo, gdalObjCache,
     """
     inputs = BlockAssociations(infiles)
     for (symbolicName, seqNum, filename) in infiles:
+        print('reading', filename)
         arr = readBlockOneFile(blockDefn, symbolicName, seqNum, filename,
             gdalObjCache, controls, tmpfileMgr, rasterizeMgr, workinggrid,
             allInfo)
         inputs[symbolicName, seqNum] = arr
+        print('read', filename)
     return inputs
 
 
